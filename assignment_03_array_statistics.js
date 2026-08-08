@@ -57,7 +57,7 @@ function calculateAverage(numbers) {
     return calculateSum(numbers) / numbers.length;
 }
 
-function calculateMax(numbers) {
+function calculateMaximum(numbers) {
     let max = numbers[0];
     for (let i = 1; i < numbers.length; i++) {
         if (numbers[i] > max) {
