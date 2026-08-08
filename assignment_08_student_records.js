@@ -83,5 +83,98 @@
 // =============================================================================
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
+const readline = require('readline-sync');
 
+let students = [];
 
+function calculateAverage(scores) {
+    if (scores.length === 0) return 0;
+    const total = scores.reduce((sum, score) => sum + score, 0);
+    return total / scores.length;
+}
+
+function addStudent() {
+    const name = readline.question("Student name: ");
+    const id = readline.questionInt("Student ID: ");
+    const numScores = readline.questionInt("How many scores? ");
+
+    const scores = [];
+    for (let i = 0; i < numScores; i++) {
+        const score = readline.questionInt(`Enter score ${i + 1}: `);
+        scores.push(score);
+    }
+
+    const student = { name, id, scores };
+    students.push(student);
+    console.log(`Student "${name}" added successfully.`);
+}
+
+function displayAllStudents() {
+    if (students.length === 0) {
+        console.log("No students have been added yet.");
+        return;
+    }
+
+    console.log('\n---ALL STUDENTS RECORDS---');
+    const tableData = students.map(student => ({
+        Name: student.name,
+        ID: student.id,
+        Scores: student.scores.join(', '),
+        Average: calculateAverage(student.scores).toFixed(2)
+    }));
+    console.table(tableData);
+}
+
+function calculateAverageForStudent() {
+    if (students.length === 0) {
+        console.log("No students in the record to search for.");
+        return;
+    }
+
+    const targetId = readline.questionInt("Enter student ID: ");
+    const student = students.find(s => s.id === targetId);
+
+    if (!student) {
+        console.log(`Error: No student found with ID ${targetId}.`);
+        return;
+    }
+
+    const avg = calculateAverage(student.scores);
+    console.log(`${student.name}'s average score: ${avg.toFixed(2)}`);
+}
+
+function startApp() {
+    let running = true;
+
+    while (running) {
+        console.log("\n===============================");
+        console.log("   STUDENT RECORD SYSTEM MENU");
+        console.log("===============================");
+        console.log("1. Add student");
+        console.log("2. Display all students");
+        console.log("3. Calculate average score");
+        console.log("4. Quit");
+
+        const choice = readline.question("Enter your choice (1-4): ");
+
+        switch (choice.trim()) {
+            case '1':
+                addStudent();
+                break;
+            case '2':
+                displayAllStudents();
+                break;
+            case '3':
+                calculateAverageForStudent();
+                break;
+            case '4':
+                console.log("Goodbye!");
+                running = false;
+                break;
+            default:
+                console.log("Invalid choice. Please enter a number between 1 and 4.");
+        }
+    }
+}
+
+startApp();
